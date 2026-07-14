@@ -226,10 +226,27 @@ key_col, help_col = st.sidebar.columns([5, 1])
 with key_col:
     gemini_api_key = st.text_input("Gemini API 키", type="password", help="https://aistudio.google.com/apikey 에서 발급")
 with help_col:
-    st.write("")
-    st.write("")
-    if st.button("➕", key="api_key_help_btn", help="API 키 발급 방법 보기"):
-        show_api_key_tutorial()
+    with st.container(key="api_help_container"):
+        if st.button("+", key="api_key_help_btn", help="API 키 발급 방법 보기"):
+            show_api_key_tutorial()
+
+# "+" 버튼을 정사각형으로 만들고, 텍스트를 정중앙에 배치하고,
+# text_input의 입력창(라벨 아래)과 같은 행에 오도록 위치 조정
+st.markdown("""
+<style>
+div.st-key-api_help_container button {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    margin-top: 1.65rem;   /* text_input 라벨 높이만큼 아래로 밀어서 행 맞춤 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    line-height: 1;
+}
+</style>
+""", unsafe_allow_html=True)
 
 bias_threshold = st.sidebar.slider("편향도 경고 기준 (%)", min_value=0, max_value=100, value=70, step=5)
 cookie_file = st.sidebar.file_uploader("유튜브 쿠키 파일 (선택, cookies.txt)", type=["txt"])
