@@ -186,10 +186,51 @@ def fig_entropy_comparison(entropy, num_unique_categories):
 
 
 # ---------------------------------------------------------
+# API 키 발급 튜토리얼 (팝업 창)
+# ---------------------------------------------------------
+@st.dialog("🔑 Gemini API 키 발급 방법")
+def show_api_key_tutorial():
+    st.markdown("""
+**Gemini API 키**는 이 앱이 영상을 자동으로 분류할 때 사용하는 열쇠예요.
+아래 순서대로 따라 하면 5분 안에 무료로 발급받을 수 있어요.
+
+---
+
+**1단계. Google AI Studio 접속**
+👉 [aistudio.google.com/apikey](https://aistudio.google.com/apikey) 로 이동하세요.
+
+**2단계. 구글 계정으로 로그인**
+평소 쓰는 구글 계정(지메일)으로 로그인하면 돼요. 별도 가입 절차 없어요.
+
+**3단계. "Create API key" 버튼 클릭**
+화면에 보이는 **Create API key** (또는 **API 키 만들기**) 버튼을 누르세요.
+새 프로젝트를 만들지, 기존 프로젝트를 쓸지 물어보면 아무거나 선택해도 괜찮아요.
+
+**4단계. 생성된 키 복사**
+`AIzaSy`로 시작하는 긴 문자열이 생성돼요. 옆에 있는 복사 아이콘을 눌러 복사하세요.
+
+**5단계. 이 앱에 붙여넣기**
+왼쪽 사이드바의 **"Gemini API 키"** 입력칸에 붙여넣으면 끝!
+""")
+    st.warning("⚠️ API 키는 비밀번호와 같아요. 캡처해서 SNS에 올리거나 남에게 공유하지 마세요. 무료 사용량에는 한도가 있으니, 발표/시연이 끝나면 AI Studio에서 키를 삭제하는 걸 추천해요.")
+    if st.button("닫기", use_container_width=True):
+        st.rerun()
+
+
+# ---------------------------------------------------------
 # 사이드바: 설정
 # ---------------------------------------------------------
 st.sidebar.header("⚙️ 설정")
-gemini_api_key = st.sidebar.text_input("Gemini API 키", type="password", help="https://aistudio.google.com/apikey 에서 발급")
+
+key_col, help_col = st.sidebar.columns([5, 1])
+with key_col:
+    gemini_api_key = st.text_input("Gemini API 키", type="password", help="https://aistudio.google.com/apikey 에서 발급")
+with help_col:
+    st.write("")
+    st.write("")
+    if st.button("➕", key="api_key_help_btn", help="API 키 발급 방법 보기"):
+        show_api_key_tutorial()
+
 bias_threshold = st.sidebar.slider("편향도 경고 기준 (%)", min_value=0, max_value=100, value=70, step=5)
 cookie_file = st.sidebar.file_uploader("유튜브 쿠키 파일 (선택, cookies.txt)", type=["txt"])
 
